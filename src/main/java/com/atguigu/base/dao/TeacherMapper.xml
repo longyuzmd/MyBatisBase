@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.base.dao.TeacherMapper">
+
+    <resultMap id="teacherMap" type="teacher">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <collection property="students" column="id" ofType="com.atguigu.base.entity.Student" select="selectStudentList"/>
+    </resultMap>
+
+    <select id="selectList" resultMap="teacherMap">
+        select * from teacher
+    </select>
+
+    <select id="selectStudentList" resultType="student">
+        select * from student where tid = #{tid}
+    </select>
+
+
+    <resultMap id="teacherMapBySecond" type="teacher">
+        <result property="id" column="aid"/>
+        <result property="name" column="aname"/>
+        <collection property="students" ofType="com.atguigu.base.entity.Student">
+            <result property="id" column="bid"/>
+            <result property="name" column="bname"/>
+            <result property="tid" column="btid"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectListBySecond" resultMap="teacherMapBySecond">
+        SELECT
+            a.id AS aid,
+            a.NAME AS aname,
+            b.id AS bid,
+            b.NAME AS bname,
+            b.tid AS btid
+        FROM
+	        teacher a
+	    LEFT JOIN student b ON a.id = b.tid
+    </select>
+</mapper>

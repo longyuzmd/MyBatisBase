@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.base.dao.BlogMapper">
+
+    <cache/>
+
+    <resultMap id="paymentResultMap" type="payment">
+        <result column="id" property="id" />
+        <result column="serial" property="serial" />
+    </resultMap>
+
+    <select id="selectBlog" resultType="payment">
+        select * from payment where id = #{id}
+    </select>
+
+
+    <select id="selectResultMapBlog" resultMap="paymentResultMap">
+        select * from payment where id = #{id}
+    </select>
+
+    <select id="selectList" parameterType="map" resultType="payment">
+        select * from payment LIMIT ${(pageNo-1) * pageSize},${pageSize}
+    </select>
+
+    <select id="selectListByRowBounds" resultType="payment">
+        select * from payment
+    </select>
+
+    <update id="updateBlogById" parameterType="payment">
+        update payment set serial = #{serial} where id = #{id}
+    </update>
+
+</mapper>

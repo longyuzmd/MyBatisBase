@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.base.dao.StudentMapper">
+
+    <!-- 第一种方式：类似与子查询的方式 -->
+    <resultMap id="selectListMap" type="student">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="tid" column="tid"/>
+        <association property="teacher" column="tid" javaType="teacher" select="selectTeacherById"/>
+    </resultMap>
+
+    <select id="selectList" resultMap="selectListMap">
+        select * from student
+    </select>
+
+    <select id="selectTeacherById" parameterType="String" resultType="teacher">
+        select * from teacher where id = #{tid}
+    </select>
+
+    <!-- 第二种方式-->
+    <resultMap id="selectListMapSecond" type="student">
+        <result property="id" column="aid"/>
+        <result property="name" column="aname"/>
+        <result property="tid" column="tid"/>
+        <association property="teacher" javaType="com.atguigu.base.entity.Teacher">
+            <result property="id" column="bid"/>
+            <result property="name" column="bname"/>
+        </association>
+    </resultMap>
+    <select id="selectListBySecond" resultMap="selectListMapSecond">
+        select
+            a.id as aid,a.name as aname,a.tid as tid,b.id as bid,b.name as bname
+        from student a,teacher b
+    </select>
+
+</mapper>
